@@ -3,7 +3,7 @@ package com.project.authapi.home.controllers;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path="/api/v1/home")
+@RequestMapping(path="")
 public class HomeController {
   @GetMapping
   public String home() {
