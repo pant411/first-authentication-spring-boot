@@ -15,17 +15,21 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Table(name = "users")
 @Entity
-public class UserModel implements UserDetails {
+@Data
+@Accessors(chain = true)
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private Integer id;
 
     @Column(nullable = false)
-    private String fullName;
+    private String fullname;
 
     @Column(unique = true, length = 100, nullable = false)
     private String email;
@@ -46,9 +50,9 @@ public class UserModel implements UserDetails {
         return List.of();
     }
 
-    public String getPassword() {
-        return password;
-    }
+    // public String getPassword() {
+    //     return password;
+    // }
 
     @Override
     public String getUsername() {
