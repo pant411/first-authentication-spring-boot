@@ -1,58 +1,52 @@
 package com.project.authapi.exceptions;
 
-import java.nio.file.AccessDeniedException;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ProblemDetail;
-import org.springframework.security.authentication.AccountStatusException;
-import org.springframework.security.authentication.BadCredentialsException;
+import java.util.Date;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.security.SignatureException;
+import com.project.authapi.exceptions.caseExceptions.NotFoundException;
+import com.project.authapi.exceptions.caseExceptions.UnauthorizedException;
+import com.project.authapi.exceptions.models.ErrorResponse;
 
-@RestControllerAdvice
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-  @SuppressWarnings("null")
-  @ExceptionHandler(Exception.class)
-  public ProblemDetail handleSecurityException(Exception exception) {
-    ProblemDetail errorDetail = null;
+@ControllerAdvice
+public class GlobalExceptionHandler {
+  
+  @ExceptionHandler(NotFoundException.class)
+  public ResponseEntity<ErrorResponse> notFoundException(NotFoundException ex, WebRequest request) {
+    ErrorResponse message = new ErrorResponse(
+        HttpStatus.NOT_FOUND.value(),
+        new Date(),
+        ex.getMessage(),
+        request.getDescription(false));
 
-    exception.printStackTrace();
-
-    if (exception instanceof BadCredentialsException) {
-      errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401), exception.getMessage());
-      errorDetail.setProperty("description", "The username or password is incorrect");
-
-      return errorDetail;
-    }
-
-    if (exception instanceof AccountStatusException) {
-      errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
-      errorDetail.setProperty("description", "The account is locked");
-    }
-
-    if (exception instanceof AccessDeniedException) {
-      errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
-      errorDetail.setProperty("description", "You are not authorized to access this resource");
-    }
-
-    if (exception instanceof SignatureException) {
-      errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
-      errorDetail.setProperty("description", "The JWT signature is invalid");
-    }
-
-    if (exception instanceof ExpiredJwtException) {
-      errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
-      errorDetail.setProperty("description", "The JWT token has expired");
-    }
-
-    if (errorDetail == null) {
-      errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(500), exception.getMessage());
-      errorDetail.setProperty("description", "Unknown internal server error.");
-    }
-
-    return errorDetail;
+    return new ResponseEntity<ErrorResponse>(message, HttpStatus.NOT_FOUND);
   }
+
+  @ExceptionHandler(UnauthorizedException.class)
+  public ResponseEntity<ErrorResponse> unauthorizedException(UnauthorizedException ex, WebRequest request) {
+    ErrorResponse message = new ErrorResponse(
+        HttpStatus.UNAUTHORIZED.value(),
+        new Date(),
+        ex.getMessage(),
+        request.getDescription(false));
+
+    return new ResponseEntity<ErrorResponse>(message, HttpStatus.UNAUTHORIZED);
+  }
+
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<ErrorResponse> globalExceptionHandler(Exception ex, WebRequest request) {
+    ErrorResponse message = new ErrorResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR.value(),
+        new Date(),
+        ex.getMessage(),
+        request.getDescription(false));
+
+    return new ResponseEntity<ErrorResponse>(message, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  // Add more exception handlers as needed
 }
