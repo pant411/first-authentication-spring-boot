@@ -19,12 +19,12 @@ import jakarta.validation.Valid;
 @RequestMapping(path = "/api/auth")
 public class AuthController {
   @Autowired
-  private AuthService authService;
+  private AuthService authService;  
 
   @PostMapping("/register")
   public ResponseEntity<Object> register(@Valid @RequestBody RegisterDto registerDto) {
     User newUser = this.authService.register(registerDto.toUser());
-    return ResponseHandler.generateResponse("Register sucessfully", HttpStatus.CREATED, newUser);
+    return ResponseHandler.generateResponse("Register successfully", HttpStatus.CREATED, newUser);
   }
 
   @PostMapping("/login")
@@ -32,6 +32,6 @@ public class AuthController {
     String token = this.authService.login(loginDto);
     HashMap<String, String> responseData = new HashMap<String, String>();
     responseData.put("accessToken", token);
-    return ResponseHandler.generateResponse("Login sucessfully", HttpStatus.CREATED, responseData);
+    return ResponseHandler.generateResponse("Login successfully", HttpStatus.CREATED, responseData);
   }
 }

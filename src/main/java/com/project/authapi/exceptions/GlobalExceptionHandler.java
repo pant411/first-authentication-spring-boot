@@ -1,7 +1,5 @@
 package com.project.authapi.exceptions;
 
-import java.util.Date;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -19,7 +17,6 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponse> notFoundException(NotFoundException ex, WebRequest request) {
     ErrorResponse message = new ErrorResponse(
         HttpStatus.NOT_FOUND.value(),
-        new Date(),
         ex.getMessage(),
         request.getDescription(false));
 
@@ -30,7 +27,6 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponse> unauthorizedException(UnauthorizedException ex, WebRequest request) {
     ErrorResponse message = new ErrorResponse(
         HttpStatus.UNAUTHORIZED.value(),
-        new Date(),
         ex.getMessage(),
         request.getDescription(false));
 
@@ -41,7 +37,6 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponse> globalExceptionHandler(Exception ex, WebRequest request) {
     ErrorResponse message = new ErrorResponse(
         HttpStatus.INTERNAL_SERVER_ERROR.value(),
-        new Date(),
         ex.getMessage(),
         request.getDescription(false));
 
