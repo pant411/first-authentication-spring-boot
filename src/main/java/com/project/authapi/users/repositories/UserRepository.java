@@ -10,5 +10,4 @@ import com.project.authapi.users.models.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
   Optional<User> findByEmail(String email);
-  Optional<User> findByName(String username); 
 }

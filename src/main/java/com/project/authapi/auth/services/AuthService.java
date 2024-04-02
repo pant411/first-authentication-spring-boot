@@ -13,6 +13,7 @@ import com.project.authapi.auth.dtos.LoginDto;
 import com.project.authapi.exceptions.caseExceptions.UnauthorizedException;
 import com.project.authapi.users.models.User;
 import com.project.authapi.users.repositories.UserRepository;
+import com.project.authapi.utils.jwt.JwtUtil;
 
 @Service
 public class AuthService {
@@ -26,7 +27,7 @@ public class AuthService {
   private AuthenticationManager authenticationManager;
 
   @Autowired
-  private JwtService jwtService;
+  private JwtUtil jwtUtil;
 
   public User register(User user) {
     Optional<User> existUser = this.userRepository.findByEmail(user.getEmail());
@@ -45,7 +46,7 @@ public class AuthService {
       throw new UnauthorizedException("Invalid username or password");
     }
 
-    String token = jwtService.generateToken(loginDto.getEmail());
+    String token = jwtUtil.generateToken(loginDto.getEmail());
     return token;
   }
 }
