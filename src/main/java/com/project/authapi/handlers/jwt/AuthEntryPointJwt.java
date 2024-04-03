@@ -17,8 +17,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
-public class AuthEntryPointJwt implements AuthenticationEntryPoint  {
-  // private static final Logger logger = LoggerFactory.getLogger(AuthEntryPointJwt.class);
+public class AuthEntryPointJwt implements AuthenticationEntryPoint {
+  // private static final Logger logger =
+  // LoggerFactory.getLogger(AuthEntryPointJwt.class);
 
   @Override
   public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
@@ -28,7 +29,8 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint  {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-    ErrorResponse errorResponse = new ErrorResponse(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized",request.getPathInfo());
+    ErrorResponse errorResponse = new ErrorResponse(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized",
+        request.getPathInfo());
 
     final ObjectMapper mapper = new ObjectMapper();
     mapper.writeValue(response.getOutputStream(), errorResponse);
