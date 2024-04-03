@@ -34,6 +34,6 @@ public class UserController {
   public ResponseEntity<Object> findAll() {
     List<User> users = this.userService.findAll();
     return users.size() > 0 ? ResponseHandler.generateResponse("Found Users", HttpStatus.OK, users)
-        : ResponseHandler.generateResponse("Not found users", HttpStatus.NOT_FOUND, users);
+        : ResponseHandler.generateResponse("Not found users", HttpStatus.NO_CONTENT, users);
   }
 }
